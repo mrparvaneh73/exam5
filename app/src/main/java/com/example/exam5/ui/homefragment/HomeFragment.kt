@@ -20,7 +20,7 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
     val adapter = UserAdapter(
        showDetails = { user ->
             findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragmentToDetailsFragment(user.nationalCode
+                HomeFragmentDirections.actionHomeFragmentToDetailsFragment(user._id
                 )
             )
         }

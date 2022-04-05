@@ -2,6 +2,7 @@ package com.example.exam5.data.remote.network
 
 import androidx.room.Insert
 import com.example.exam5.model.User
+import com.example.exam5.model.UserInfo
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response

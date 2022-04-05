@@ -14,8 +14,10 @@ import kotlinx.coroutines.withContext
 
 class HomeViewModel(private val repository: Repository, application: Application) :
     AndroidViewModel(application) {
+
     private val _userList = MutableLiveData<List<User>>()
         val userList: LiveData<List<User>> = _userList
+
     fun getUser() {
         viewModelScope.launch {
             val response = repository.getUserList()

@@ -1,29 +1,28 @@
-package com.example.exam5.ui
+package com.example.exam5.ui.mainactivity
 
 import android.app.Application
 import android.util.Log
-import androidx.databinding.Observable
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.example.exam5.data.Repository
+import androidx.lifecycle.*
+import com.example.exam5.data.repositories.Repository
+import com.example.exam5.model.CreateUser
 import com.example.exam5.model.User
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class Myviewmodel(private val repository: Repository, application: Application) :
-    AndroidViewModel(application) {
+@HiltViewModel
+class Myviewmodel @Inject constructor(private val repository: Repository) :
+    ViewModel() {
     private val _usrid = MutableLiveData<String>()
         val usrid: LiveData<String> = _usrid
-    fun addUser(user: User) {
+    fun creatUser(user: CreateUser) {
         viewModelScope.launch {
             val response = repository.creatuser(user)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     _usrid.postValue(response.body())
-                    Log.d("issuccecfull", "addUser: " + response.body())
                 }
             }
         }

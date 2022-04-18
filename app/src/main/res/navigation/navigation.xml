@@ -20,4 +20,23 @@
             android:name="userid"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/localUserFragment"
+        android:name="com.example.exam5.ui.LocalUserFragment.LocalUserFragment"
+        android:label="LocalUserFragment" >
+        <action
+            android:id="@+id/action_localUserFragment_to_updateFragment"
+            app:destination="@id/updateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateFragment"
+        android:name="com.example.exam5.ui.updatefragment.UpdateFragment"
+        android:label="updateFragment" >
+        <action
+            android:id="@+id/action_updateFragment_to_localUserFragment"
+            app:destination="@id/localUserFragment" />
+        <argument
+            android:name="currentUser"
+            app:argType="com.example.exam5.model.User" />
+    </fragment>
 </navigation>

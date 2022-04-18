@@ -1,16 +1,18 @@
 package com.example.exam5.data.remote.network
 
 import androidx.room.Insert
+import com.example.exam5.model.CreateUser
 import com.example.exam5.model.User
 import com.example.exam5.model.UserInfo
+import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
-interface UserApi {
+interface UserService {
     @GET("users")
-   suspend fun getuser(): Response<List<User>>
+    suspend fun getUsers(): Response<List<User>>
 
     @Multipart
     @POST("users/{id}/image")
@@ -23,5 +25,5 @@ interface UserApi {
    suspend fun getShowInfo(@Path("id")id:String):Response<User>
 
     @POST("users")
-    suspend fun creatUser(@Body user: User): Response<String>
+    suspend fun creatUser(@Body user: CreateUser): Response<String>
 }

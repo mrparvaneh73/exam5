@@ -4,48 +4,52 @@ import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.exam5.R
-import com.example.exam5.data.Repository
-import com.example.exam5.data.remote.RemoteDataSource
-import com.example.exam5.data.remote.network.Service
 import com.example.exam5.databinding.FragmentDetailsBinding
-import com.example.exam5.ui.homefragment.HomeViewModel
-import com.example.exam5.ui.homefragment.HomeViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 
-class DetailsFragment:Fragment(R.layout.fragment_details) {
+@AndroidEntryPoint
+class DetailsFragment : Fragment(R.layout.fragment_details) {
     var imageByteArray: ByteArray? = null
-    private lateinit var binding: FragmentDetailsBinding
+    private var _binding: FragmentDetailsBinding? = null
+    private val binding get() = _binding!!
+
     private val args by navArgs<DetailsFragmentArgs>()
-    private lateinit var myviewModel:DetailViewModel
-    private val cameraluncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
-        imageByteArray = it.toByteArray()
-        binding.imageview.setImageBitmap(it)
-    }
-    private val selectPictureLuncher = registerForActivityResult(ActivityResultContracts.GetContent()) {
-        val change = context?.contentResolver?.openInputStream(it)?.readBytes()
-        imageByteArray = change
-        binding.imageview.setImageURI(it)
-    }
+
+    private val myviewModel by viewModels<DetailViewModel>()
+
+    private val cameraluncher =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+            imageByteArray = it!!.toByteArray()
+            binding.imageview.setImageBitmap(it)
+        }
+    private val selectPictureLuncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) {
+            val change = context?.contentResolver?.openInputStream(it!!)?.readBytes()
+            imageByteArray = change
+            binding.imageview.setImageURI(it)
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding= FragmentDetailsBinding.bind(view)
-        viewmodelprovider()
+        _binding = FragmentDetailsBinding.bind(view)
+
         myviewModel.showinfo(args.userid)
-        myviewModel.userList.observe(viewLifecycleOwner){
-            binding.firstname.text=it.firstName
-            binding.lastname.text=it.lastName
-            binding.nationalcode.text=it.nationalCode
+        myviewModel.userList.observe(viewLifecycleOwner) {
+            binding.firstname.text = it.firstName
+            binding.lastname.text = it.lastName
+            binding.nationalcode.text = it.nationalCode
         }
 
         changeprofile()
         upload()
     }
+
     private fun upload() {
         binding.upload.setOnClickListener {
             myviewModel.uploadimage(args.userid, imageByteArray!!)
@@ -70,21 +74,16 @@ class DetailsFragment:Fragment(R.layout.fragment_details) {
         }
     }
 
-    private fun viewmodelprovider() {
-        val application = requireNotNull(this.activity).application
 
-        val remoteDataSource = RemoteDataSource(Service)
-
-        val repository = Repository(remoteDataSource)
-
-        val factory = DetailViewModelFactory(repository, application)
-
-        myviewModel = ViewModelProvider(this, factory).get(DetailViewModel::class.java)
-    }
     fun Bitmap.toByteArray(): ByteArray {
         ByteArrayOutputStream().apply {
             compress(Bitmap.CompressFormat.JPEG, 10, this)
             return toByteArray()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

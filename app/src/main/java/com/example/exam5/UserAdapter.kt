@@ -12,6 +12,7 @@ import com.example.exam5.model.User
 class UserAdapter(private var showDetails: (User) -> Unit) :
     ListAdapter<User, UserAdapter.UserListViewHolder>(TodoDiffCallback()) {
 
+
     class UserListViewHolder(
         private val binding: UserItemBinding,
         private var showDetails: (User) -> Unit
@@ -26,6 +27,9 @@ class UserAdapter(private var showDetails: (User) -> Unit) :
             binding.root.setOnClickListener {
                 showDetails(user)
             }
+            Glide.with(binding.root).load(user.image).into(binding.imageview)
+
+
         }
 
     }

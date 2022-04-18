@@ -1,20 +1,21 @@
 package com.example.exam5.ui.detailsfragment
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.example.exam5.data.Repository
+import androidx.lifecycle.*
+import com.example.exam5.data.repositories.Repository
 import com.example.exam5.model.User
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class DetailViewModel(private val repository: Repository, application: Application) :
-    AndroidViewModel(application){
+@HiltViewModel
+class DetailViewModel @Inject constructor(private val repository: Repository) :
+    ViewModel(){
+
     private val _userList = MutableLiveData<User>()
     val userList: LiveData<User> = _userList
     fun showinfo(id:String) {
@@ -35,4 +36,5 @@ class DetailViewModel(private val repository: Repository, application: Applicati
         }
 
     }
+
 }

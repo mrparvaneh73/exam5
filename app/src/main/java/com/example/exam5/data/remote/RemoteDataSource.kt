@@ -1,20 +1,21 @@
 package com.example.exam5.data.remote
 
-import com.example.exam5.data.remote.network.Service
-import com.example.exam5.data.remote.network.UserApi
+import com.example.exam5.data.remote.network.UserService
+import com.example.exam5.model.CreateUser
 import com.example.exam5.model.User
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class RemoteDataSource(private val service: Service) {
-    suspend fun getUSerList() = service.service.getuser()
-
-
-    suspend fun showInfo(id: String) = service.service.getShowInfo(id)
+class RemoteDataSource @Inject constructor(private val service: UserService) {
+    suspend fun getUSerList() = service.getUsers()
 
 
-    suspend fun uploadimage(id: String, image: MultipartBody.Part) = service.service.sendImage(id, image)
+    suspend fun showInfo(id: String) = service.getShowInfo(id)
 
 
-    suspend fun creatuser(user: User) = service.service.creatUser(user)
+    suspend fun uploadimage(id: String, image: MultipartBody.Part) = service.sendImage(id, image)
+
+
+    suspend fun creatuser(user: CreateUser) = service.creatUser(user)
 
 }

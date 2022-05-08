@@ -1,9 +1,9 @@
 package com.example.exam5.ui.mainactivity
 
 import android.app.Dialog
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.exam5.R
@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.fab.setOnClickListener {
             showDialog()
+
         }
     }
     fun init(){

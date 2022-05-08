@@ -7,10 +7,16 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.example.exam5.R
+import com.example.exam5.data.remote.Resource
 import com.example.exam5.databinding.FragmentDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 
 @AndroidEntryPoint
@@ -40,11 +46,20 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         _binding = FragmentDetailsBinding.bind(view)
 
         myviewModel.showinfo(args.userid)
-        myviewModel.userList.observe(viewLifecycleOwner) {
-            binding.firstname.text = it.firstName
-            binding.lastname.text = it.lastName
-            binding.nationalcode.text = it.nationalCode
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                myviewModel.usersInfo.collect{
+                    binding.firstname.text = it.firstName
+                    binding.lastname.text = it.lastName
+                    binding.nationalcode.text = it.nationalCode
+
+
+                }
+            }
         }
+
+
+
 
         changeprofile()
         upload()

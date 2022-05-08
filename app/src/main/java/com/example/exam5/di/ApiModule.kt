@@ -1,5 +1,6 @@
 package com.example.exam5.di
 
+import com.example.exam5.utils.Constants
 import com.example.exam5.data.remote.network.AuthenticationInterceptor
 import com.example.exam5.data.remote.network.UserService
 import dagger.Module
@@ -38,7 +39,7 @@ object ApiModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://papp.ir/api/v1/")
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

@@ -16,7 +16,7 @@ import javax.inject.Inject
 class Myviewmodel @Inject constructor(private val repository: Repository) :
     ViewModel() {
     private val _usrid = MutableLiveData<String>()
-        val usrid: LiveData<String> = _usrid
+    val usrid: LiveData<String> = _usrid
     fun creatUser(user: CreateUser) {
         viewModelScope.launch {
             val response = repository.creatuser(user)

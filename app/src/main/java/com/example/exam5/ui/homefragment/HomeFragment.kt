@@ -28,13 +28,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val myviewModel by viewModels<HomeViewModel>()
 
-    val adapter = UserAdapter(showDetails = { user ->
-            findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragmentToDetailsFragment(
-                    user._id
-                )
+   private val adapter = UserAdapter(showDetails = { user ->
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToDetailsFragment(
+                user._id
             )
-        })
+        )
+    })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,29 +43,28 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         observer()
         swipe()
-       binding.recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
 
     }
 
     fun observer() = binding.apply {
         myviewModel.getUserList()
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                myviewModel.users.collectLatest {
-                    when (it) {
-                        is Resource.Success -> {
-                            adapter.submitList(it.data)
-                        }
-                        is Resource.Loading -> {
+        lifecycleScope.launchWhenStarted {
 
-                        }
-                        is Resource.Error -> {
-
-                        }
+            myviewModel.users.collectLatest {
+                when (it) {
+                    is Resource.Success -> {
+                        adapter.submitList(it.data)
                     }
+                    is Resource.Loading -> {
 
+                    }
+                    is Resource.Error -> {
+
+                    }
                 }
+
             }
         }
     }
@@ -77,15 +76,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
                         val position = viewHolder.absoluteAdapterPosition
-
-                        lifecycleScope.launch {
-                            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                                myviewModel.users.collectLatest {
-                                    myviewModel.insertPerson(it.data?.get(position)!!)
-                                }
-                            }
-                        }
-
+                        myviewModel.insertPerson(adapter.currentList.get(position))
 
                         recyclerView.adapter?.notifyDataSetChanged()
 

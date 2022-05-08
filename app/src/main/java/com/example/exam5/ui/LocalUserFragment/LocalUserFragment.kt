@@ -51,7 +51,6 @@ class LocalUserFragment : Fragment(R.layout.fragment_localuser) {
     private fun swipe()=binding.apply {
         val swipGesture = object : SwipGestureDelete(view?.context!!) {
 
-            @SuppressLint("NotifyDataSetChanged")
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 when (direction) {
                     ItemTouchHelper.LEFT -> {

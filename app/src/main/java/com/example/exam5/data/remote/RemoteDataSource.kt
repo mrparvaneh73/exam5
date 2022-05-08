@@ -7,7 +7,9 @@ import okhttp3.MultipartBody
 import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(private val service: UserService) {
-    suspend fun getUSerList() = service.getUsers()
+  suspend fun getUserList():List<User>{
+      return service.getUsers()
+  }
 
 
     suspend fun showInfo(id: String) = service.getShowInfo(id)

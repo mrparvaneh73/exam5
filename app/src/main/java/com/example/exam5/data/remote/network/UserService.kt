@@ -12,17 +12,17 @@ import retrofit2.http.*
 
 interface UserService {
     @GET("users")
-    suspend fun getUsers(): Response<List<User>>
+    suspend fun getUsers(): List<User>
 
     @Multipart
     @POST("users/{id}/image")
-   suspend fun sendImage(
+    suspend fun sendImage(
         @Path("id") id: String,
         @Part image: MultipartBody.Part
     ): Response<Any>
 
     @GET("http://papp.ir/api/v1/users/{id}")
-   suspend fun getShowInfo(@Path("id")id:String):Response<User>
+    suspend fun getShowInfo(@Path("id") id: String):Response<User>
 
     @POST("users")
     suspend fun creatUser(@Body user: CreateUser): Response<String>
